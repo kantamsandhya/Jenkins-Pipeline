@@ -1,4 +1,7 @@
 pipeline {
+   def tomcatweb = 'C:\Users\Lenovo\Downloads\apache-tomcat-9.0.41\webapps'
+   def tomcatBin = 'C:\Users\Lenovo\Downloads\apache-tomcat-9.0.41\bin'
+   def tomcatStatus = ''
    agent any
        stages {
         stage('Build') {
@@ -13,7 +16,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                bat "copy C:/Users/Lenovo/.jenkins/workspace/Jenkins_Pipeline/target/* C:/Users/Lenovo/Downloads/apache-tomcat-9.0.41/webapps"
+               bat "${tomcatBin}\\startup.bat"
             }
         }       
     }
