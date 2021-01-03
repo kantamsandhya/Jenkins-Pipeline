@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                "cp -R C:\Users\Lenovo\.jenkins\workspace\pipelinetomcat/target/* C:\Users\Lenovo\Downloads\apache-tomcat-9.0.41\webapps"
+                "cp -R C:/Users/Lenovo/.jenkins/workspace/pipelinetomcat/target/* C:/Users/Lenovo/Downloads/apache-tomcat-9.0.41/webapps"
             }
         }       
     }
