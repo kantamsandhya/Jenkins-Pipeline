@@ -1,7 +1,6 @@
 pipeline {
-   def tomcatweb = 'C:/Users/Lenovo/Downloads/apache-tomcat-9.0.41/webapps'
-   def tomcatBin = 'C:/Users/Lenovo/Downloads/apache-tomcat-9.0.41/bin'
-   def tomcatStatus = ''
+    tomcatweb = 'C:/Users/Lenovo/Downloads/apache-tomcat-9.0.41/webapps'
+    tomcatBin = 'C:/Users/Lenovo/Downloads/apache-tomcat-9.0.41/bin'
    agent any
        stages {
         stage('Build') {
