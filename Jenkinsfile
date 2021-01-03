@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh "cp -R C:\Users\Lenovo\.jenkins\workspace\Jenkins_Pipeline/target/* C:\Users\Lenovo\Downloads\apache-tomcat-9.0.41\webapps"
+                bat "copy C:/Users/Lenovo/.jenkins/workspace/Jenkins_Pipeline/target/* C:/Users/Lenovo/Downloads/apache-tomcat-9.0.41/webapps"
             }
         }       
     }
