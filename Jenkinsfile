@@ -1,6 +1,4 @@
 pipeline {
-    tomcatweb = 'C:/Users/Lenovo/Downloads/apache-tomcat-9.0.41/webapps'
-    tomcatBin = 'C:/Users/Lenovo/Downloads/apache-tomcat-9.0.41/bin'
    agent any
        stages {
         stage('Build') {
@@ -14,12 +12,9 @@ pipeline {
             }
         }
         stage('Deploy') {
-           steps {
-           bat "copy target\\Jenkins.war \"${tomcatweb}\\JenkinsWar.war\""
-        }
-        }
-            
+            steps {
+                "cp -R C:\Users\Lenovo\.jenkins\workspace\pipelinetomcat/target/* C:\Users\Lenovo\Downloads\apache-tomcat-9.0.41\webapps"
+            }
         }       
     }
-
-      
+}
