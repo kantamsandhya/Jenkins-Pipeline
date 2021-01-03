@@ -1,5 +1,5 @@
 node {
-   stage('Git Repo'){
+   stage('Git Repo')
     git url: 'https://github.com/kantamsandhya/Jenkins-Pipeline.git', branch: 'master'
 }
        
@@ -14,4 +14,4 @@ node {
           
           
     
-}
+
