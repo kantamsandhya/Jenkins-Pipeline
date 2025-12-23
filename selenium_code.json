@@ -1,1 +1,76 @@
-{"selenium_script": "from selenium import webdriver\nfrom selenium.webdriver.common.by import By\nfrom selenium.webdriver.common.keys import Keys\nfrom selenium.webdriver.support.ui import WebDriverWait\nfrom selenium.webdriver.support import expected_conditions as EC\nimport time\n\ndef search_laptops():\n    # Set up WebDriver\n    driver = webdriver.Chrome()\n    driver.get(\"https://www.flipkart.com\")\n\n    try:\n        # Close the login popup if it appears\n        WebDriverWait(driver, 10).until(\n            EC.presence_of_element_located((By.XPATH, \"//button[contains(text(),'\u2715')]\"))\n        ).click()\n\n        # Locate the search bar\n        search_bar = driver.find_element(By.NAME, \"q\")\n\n        # Enter 'laptops' into the search bar and press Enter\n        search_bar.send_keys(\"laptops\")\n        search_bar.send_keys(Keys.RETURN)\n\n        # Wait for the search results to load\n        WebDriverWait(driver, 10).until(\n            EC.presence_of_element_located((By.XPATH, \"//div[contains(@class,'_1YokD2 _3Mn1Gg')]\"))\n        )\n\n        # Assert that search results are displayed\n        assert \"laptops\" in driver.title.lower()\n\n    finally:\n        # Close the browser\n        driver.quit()\n\nif __name__ == \"__main__\":\n    search_laptops()\n"}
+# flipkart_login.py
+"""
+Automates the login functionality for Flipkart using Selenium WebDriver.
+- Modular and reusable functions
+- Proper waits and assertions
+- Exception handling
+"""
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
+import time
+
+# Configurations
+FLIPKART_URL = "https://www.flipkart.com/account/login"
+USERNAME = "your_email_or_phone"
+PASSWORD = "your_password"
+
+# Locators
+USERNAME_INPUT = (By.XPATH, '//input[@class="_2IX_2- VJZDxU"]')
+PASSWORD_INPUT = (By.XPATH, '//input[@type="password"]')
+LOGIN_BUTTON = (By.XPATH, '//button[@type="submit" and contains(@class,"_2KpZ6l")]')
+PROFILE_ICON = (By.XPATH, '//div[contains(@class, "_28p97w")]')  # This may change, adjust as needed
+
+def setup_driver():
+    """Initializes and returns the WebDriver."""
+    options = webdriver.ChromeOptions()
+    options.add_argument('--start-maximized')
+    driver = webdriver.Chrome(options=options)
+    return driver
+
+def login_flipkart(driver, username, password):
+    """Logs into Flipkart with provided credentials."""
+    driver.get(FLIPKART_URL)
+    try:
+        # Wait for username field
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(USERNAME_INPUT)
+        )
+        driver.find_element(*USERNAME_INPUT).send_keys(username)
+        driver.find_element(*PASSWORD_INPUT).send_keys(password)
+        driver.find_element(*LOGIN_BUTTON).click()
+    except (TimeoutException, NoSuchElementException) as e:
+        print(f"Error during login: {e}")
+        driver.quit()
+        raise
+
+def validate_login(driver):
+    """Validates successful login by checking for profile icon or user-specific element."""
+    try:
+        # Wait for profile/user icon to appear
+        WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located(PROFILE_ICON)
+        )
+        print("Login successful!")
+        return True
+    except TimeoutException:
+        print("Login failed or profile icon not found.")
+        return False
+
+def main():
+    driver = setup_driver()
+    try:
+        login_flipkart(driver, USERNAME, PASSWORD)
+        assert validate_login(driver), "Login validation failed."
+    except AssertionError as e:
+        print(e)
+    finally:
+        time.sleep(3)  # For demo purposes; remove in production
+        driver.quit()
+
+if __name__ == "__main__":
+    main()
