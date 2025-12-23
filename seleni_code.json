@@ -1,0 +1,53 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+
+def test_flipkart_login():
+    # Set up WebDriver
+    driver = webdriver.Chrome()
+    driver.get("https://www.flipkart.com")
+
+    try:
+        # Close the initial login popup if it appears
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'✕')]")
+        ).click()
+
+        # Click on the login link
+        login_link = driver.find_element(By.XPATH, "//a[contains(text(),'Login')]")
+        login_link.click()
+
+        # Wait for the login form to appear
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//input[@class='_2IX_2- VJZDxU']"))
+        )
+
+        # Locate username and password fields
+        username_field = driver.find_element(By.XPATH, "//input[@class='_2IX_2- VJZDxU']")
+        password_field = driver.find_element(By.XPATH, "//input[@type='password']")
+
+        # Enter credentials
+        username_field.send_keys("testuser@example.com")
+        password_field.send_keys("password123")
+
+        # Click login button
+        login_button = driver.find_element(By.XPATH, "//button[@type='submit']")
+        login_button.click()
+
+        # Wait for the account page to load
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//div[contains(text(),'My Account')]")
+        )
+
+        # Assert successful login
+        assert "My Account" in driver.page_source
+
+    finally:
+        # Close the browser
+        driver.quit()
+
+if __name__ == "__main__":
+    test_flipkart_login()
